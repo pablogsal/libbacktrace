@@ -940,7 +940,7 @@ top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I config
 AM_CPPFLAGS = 
 AM_CFLAGS = $(EXTRA_FLAGS) $(WARN_FLAGS) $(PIC_FLAG)
-include_HEADERS = backtrace.h backtrace-supported.h
+include_HEADERS = backtrace.h backtrace-supported.h internal.h
 lib_LTLIBRARIES = libbacktrace.la
 libbacktrace_la_SOURCES = \
 	backtrace.h \
@@ -1797,25 +1797,25 @@ distclean-libtool:
 	-rm -f libtool config.lt
 install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
-	@list='$(include_HEADERS)'; test -n "$(includedir)" || list=; \
+	@list='$(include_HEADERS)'; test -n "$(includedir)/libbacktrace" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(includedir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(includedir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(includedir)/libbacktrace'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(includedir)/libbacktrace" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(includedir)'"; \
-	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(includedir)" || exit $$?; \
+	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(includedir)/libbacktrace'"; \
+	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(includedir)/libbacktrace" || exit $$?; \
 	done
 
 uninstall-includeHEADERS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(include_HEADERS)'; test -n "$(includedir)" || list=; \
+	@list='$(include_HEADERS)'; test -n "$(includedir)/libbacktrace" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(includedir)'; $(am__uninstall_files_from_dir)
+	dir='$(DESTDIR)$(includedir)/libbacktrace'; $(am__uninstall_files_from_dir)
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique

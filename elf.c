@@ -550,7 +550,7 @@ elf_crc32_file (struct backtrace_state *state, int descriptor,
 /* A dummy callback function used when we can't find a symbol
    table.  */
 
-static void
+void
 elf_nosyms (struct backtrace_state *state ATTRIBUTE_UNUSED,
 	    uintptr_t addr ATTRIBUTE_UNUSED,
 	    backtrace_syminfo_callback callback ATTRIBUTE_UNUSED,
@@ -624,7 +624,7 @@ elf_symbol_search (const void *vkey, const void *ventry)
 
 /* Initialize the symbol table info for elf_syminfo.  */
 
-static int
+int
 elf_initialize_syminfo (struct backtrace_state *state,
 			uintptr_t base_address,
 			const unsigned char *symtab_data, size_t symtab_size,
@@ -751,7 +751,7 @@ elf_add_syminfo_data (struct backtrace_state *state,
 
 /* Return the symbol name and value for an ADDR.  */
 
-static void
+void
 elf_syminfo (struct backtrace_state *state, uintptr_t addr,
 	     backtrace_syminfo_callback callback,
 	     backtrace_error_callback error_callback ATTRIBUTE_UNUSED,
@@ -1082,7 +1082,8 @@ elf_open_debugfile_by_debuglink (struct backtrace_state *state,
     {
       uint32_t got_crc;
 
-      got_crc = elf_crc32_file (state, ddescriptor, error_callback, data);
+      // CHANGED
+      got_crc = debuglink_crc ? elf_crc32_file (state, ddescriptor, error_callback, data) : 0;
       if (got_crc != debuglink_crc)
 	{
 	  backtrace_close (ddescriptor, error_callback, data);
@@ -3981,7 +3982,7 @@ backtrace_uncompress_lzma (struct backtrace_state *state,
    elf_add will need to be called on the descriptor again after
    base_address is determined.  */
 
-static int
+int
 elf_add (struct backtrace_state *state, const char *filename, int descriptor,
 	 const unsigned char *memory, size_t memory_size,
 	 uintptr_t base_address, backtrace_error_callback error_callback,
@@ -4355,7 +4356,7 @@ elf_add (struct backtrace_state *state, const char *filename, int descriptor,
 
   if (symtab_shndx == 0)
     symtab_shndx = dynsym_shndx;
-  if (symtab_shndx != 0 && !debuginfo)
+  if (symtab_shndx != 0) // CHANGED
     {
       const b_elf_shdr *symtab_shdr;
       unsigned int strtab_shndx;

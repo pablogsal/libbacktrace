@@ -33,6 +33,10 @@ POSSIBILITY OF SUCH DAMAGE.  */
 #ifndef BACKTRACE_INTERNAL_H
 #define BACKTRACE_INTERNAL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* We assume that <sys/types.h> and "backtrace.h" have already been
    included.  */
 
@@ -376,5 +380,24 @@ extern int backtrace_uncompress_lzma (struct backtrace_state *,
 				      backtrace_error_callback, void *data,
 				      unsigned char **uncompressed,
 				      size_t *uncompressed_size);
+
+extern int elf_add (struct backtrace_state *state, const char *filename, int descriptor,
+	 const unsigned char *memory, size_t memory_size,
+	 uintptr_t base_address, backtrace_error_callback error_callback,
+	 void *data, fileline *fileline_fn, int *found_sym, int *found_dwarf,
+	 struct dwarf_data **fileline_entry, int exe, int debuginfo,
+	 const char *with_buildid_data, uint32_t with_buildid_size);
+extern void elf_syminfo (struct backtrace_state *state, uintptr_t addr,
+			 backtrace_syminfo_callback callback,
+			 backtrace_error_callback error_callback ATTRIBUTE_UNUSED,
+			 void *data);
+extern void elf_nosyms (struct backtrace_state *state ATTRIBUTE_UNUSED,
+			uintptr_t addr ATTRIBUTE_UNUSED,
+			backtrace_syminfo_callback callback ATTRIBUTE_UNUSED,
+			backtrace_error_callback error_callback, void *data);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

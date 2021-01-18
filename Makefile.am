@@ -35,7 +35,7 @@ AM_CPPFLAGS =
 
 AM_CFLAGS = $(EXTRA_FLAGS) $(WARN_FLAGS) $(PIC_FLAG)
 
-include_HEADERS = backtrace.h backtrace-supported.h
+include_HEADERS = backtrace.h backtrace-supported.h internal.h
 
 lib_LTLIBRARIES = libbacktrace.la
 
